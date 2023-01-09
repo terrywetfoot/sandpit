@@ -1,0 +1,39 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr 1fr;
+	background: rgba(210, 190, 190, 0.1);
+}
+
+main {
+	grid-area: 1 / 1 / 4 / 4;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+converter {
+	background-color: #f1f1f1;
+	padding: 10px;
+}
+
+#user-input {
+	background: rgba(150, 100, 100, 0.1);
+	width: 98%;
+	height: 300px;
+	font-size: 20px;
+}
+
+
+header {
+	grid-area: 1 / 1 / 2 / 4;
+	background-color: #f1f1f1;
+	padding: 30px;
+}
+
+footer {
+	grid-area: 3 / 1 / 4 / 4;
+	background-color: #f1f1f1;
+	padding: 10px;
+}
+

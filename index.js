@@ -1,59 +1,46 @@
-
-//Regex method
-function convertToOwl(input) {
-    return input
-        //Carriage return and tab after each closing tag with > converted to )
-        .replaceAll(/<\/(.*?)>/g, ")")
-        //Wraps the contents of p/h tags in quotes
-        .replaceAll(/<p>(.*?)\)/g, '(:p "$1")') // p
-        .replaceAll(/<h(.*?)>(.*?)\)/g, '(:h$1 "$2")') // h
-        //</br> converted to (:br)
-        .replaceAll(/<br\/>/g, "(:br)")
-        //Converts <html> tag to owl (:html)
-        .replaceAll(/</g, "(:")
-        .replaceAll(/>/g, "\t")
-        .replaceAll(/=/g, ": ")
-}
-
-//DOMParser method
 function generateOwl(doc) {
-    let owl = "";
-    //Iterate through each node and append each to the owl string
-    doc.forEach(node => {
-            let tag = node.tagName.toLowerCase();
-            let attributes = node.getAttributeNames();
+    let owl = '';
 
-            owl += `(:${tag}` 
+    function metamorphose(element) {
+        let tag = element.tagName.toLowerCase();
+        let attributes = element.getAttributeNames();
 
-            attributes.forEach(attribute => {
-                owl += ` ${attribute}: "${node.getAttribute(attribute)}"`
-        })
+        owl += `(:${tag} `;
 
-        //if the node has text content and no children, add the text content to the owl string
-        //prevents text being added to <html> <head> etc
-        if (node.textContent && !node.children.length) {
-                owl += ' "' + node.textContent + '"';
+        for (const attribute of attributes) {
+            owl += `${attribute}: "${element.getAttribute(attribute)}" `;
         }
-        owl += ")\r\t"
-    })
 
-    return owl;
+        // If the node has text content and no children, add the text content to the owl string
+        // The No Children check prevents text being added to ancestors
+        if (element.textContent && !element.children.length) {
+            owl += ' "' + element.textContent + '" ';
+        }
+        
+        //Recursive loop for every child element of current element
+        for (const child of element.children) {
+            metamorphose(child)
+        }
+
+        owl += ') \r'    
+        }
+
+    // Where the metamorphosis starts    
+    for (const child of doc.children) {
+        metamorphose(child)
+        
+    }
+    return owl
 }
 
-
-//-----------------
-
-//Convert button
+// Convert button
 $("#convert-button").on("click", function() { 
-    let input = $("#user-input").val().trim();
-    let parser = new DOMParser();
-    let doc = parser.parseFromString(input, "text/html").querySelectorAll("*");
-
-    let owlA = convertToOwl(input);
-    let owlB = generateOwl(doc);
+    const input = $("#user-input").val().trim();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(input, "text/html");
+  
+    let owl = generateOwl(doc);
 
     $("#result-text").empty();
-    $("#result-text").append("Regex Method:\r" + '<xmp>' + owlA + '</xmp>');
-    $("#result-text").append("DOMParser Method:\r" + '<xmp>' + owlB + '</xmp>');
-
+    $("#result-text").append("DOMParser Method:\r" + '<xmp>' + owl + '</xmp>');
 });

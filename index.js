@@ -1,37 +1,60 @@
+
+//function to generate the owl string
 function generateOwl(doc) {
-    let owl = '';
+  let owl = '';
 
-    function metamorphose(element) {
-        let tag = element.tagName.toLowerCase();
-        let attributes = element.getAttributeNames();
-
-        owl += `(:${tag} `;
-
-        for (const attribute of attributes) {
-            owl += `${attribute}: "${element.getAttribute(attribute)}" `;
-        }
-
-        // If the node has text content and no children, add the text content to the owl string
-        // The No Children check prevents text being added to ancestors
-        if (element.textContent && !element.children.length) {
-            owl += ' "' + element.textContent + '" ';
-        }
-        
-        //Recursive loop for every child element of current element
-        for (const child of element.children) {
-            metamorphose(child)
-        }
-
-        owl += ') \r'    
-        }
-
-    // Where the metamorphosis starts    
-    for (const child of doc.children) {
-        metamorphose(child)
-        
+  //HELPER 1
+  //function to generate tag name and attributes
+  function generateTagAttr(element) {
+    console.log(element)
+    let tag = element.tagName.toLowerCase();
+    let attributes = element.getAttributeNames();
+    owl += `(:${tag} `;
+    for (const attribute of attributes) {
+        owl += `${attribute}: "${element.getAttribute(attribute)}" `;
     }
-    return owl
+  }
+  //HELPER 2
+  //function to generate text content of the element
+  function generateText(element) {
+    let text = element.textContent.trim();
+    owl += " '" + text + "' " ;
+  }
+  //HELPER 3
+  //function to generate the closing tag
+  function generateClosingTag() {
+      owl += `) \r `;
+  }
+  ////////////////////////////////////////////////////////////////
+
+  //The main function 
+  function metamorphose(element) {
+
+    if (element instanceof Element){
+      generateTagAttr(element);
+
+      //inner loop for child nodes
+      for (const child of element.childNodes) {
+        if (child.nodeType === Node.TEXT_NODE && child.textContent.trim() !== "") {
+          generateText(child);
+        }
+        metamorphose(child)
+      }
+
+      generateClosingTag(element);
+    }
+
+  }//end of metamorphose function
+
+  //WHERE THE THING ACTUALLY STARTS ////////////////////////
+  for (const child of doc.childNodes) {
+    metamorphose(child)
+  }
+
+  return owl ;
 }
+
+
 
 // Convert button
 $("#convert-button").on("click", function() { 

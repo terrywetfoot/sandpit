@@ -80,58 +80,9 @@ function generateOwl(doc) {
 return owl ;
 }
 
-
-
-
-
-
-
-test = `<!DOCTYPE html>
-                  <html>
-                    <head>
-                      <title>Page Title</title>
-                    </head>
-                    <body>
-                      <div id="thedivmaster">
-                        <div class="empty"></div>
-                        <div></div>
-                        <div id="thedivchef">
-                          <div></div>
-                          <div></div>
-                          <div></div>
-                          <div></div>
-                          <div>
-                            <div>
-                              <div>
-                                <div>
-                                  <div>
-                                    <div>
-                                      <div>
-                                        <div>
-                                          <div>  <input type="hidden" value="3" /> <p>some words that should be quite far forward? </p></div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <h1>This is a Heading</h1>
-                      <p id="paragidentifier">This </br> is a paragraph.</p>
-                      <p>This is another paragraph.</p>
-                      <p>This is a paragraph with <a href="https://www.w3schools.com">a link</a>.</p>
-                    </body>
-                  </html>`
-
-
-
 // Convert button
 $("#convert-button").on("click", function() { 
-    // const input = $("#user-input").val().trim();
-    const input = test;
+    const input = $("#user-input").val().trim();
     const parser = new DOMParser();
     const doc = parser.parseFromString(input, "text/html");
   

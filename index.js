@@ -36,9 +36,10 @@ function generateOwl(doc) {
     owl += `\r`;
   }
   //HELPER 6
-  //function to check if the element is an empty div
-  function isVoid(element) {
-    return element.childNodes.length === 0;
+  //function to check if the element is an empty non Void element
+  function isEmptyNotVoid(element) {
+    const voidElements = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'];
+    return element.childNodes.length === 0 && !voidElements.includes(element.tagName.toLowerCase());
   }
   //HELPER 7
   //function to check if the element is a text node
@@ -53,8 +54,8 @@ function generateOwl(doc) {
       generateTabForward(indentLevel);
       generateTagAttr(element)
 
-      //if empty div, generate the empty quote
-      if (isVoid(element)) {
+      //if empty non void element, generate the empty quote
+      if (isEmptyNotVoid(element)) {
         generateText(element);
       }
       //inner loop for child nodes

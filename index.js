@@ -15,8 +15,8 @@ function generateOwl(doc) {
   //HELPER 2
   //function to generate text content of the element
   function generateText(element) {
-    let text = element.textContent.trim();
-    owl += " '" + text + "'" ;
+    let text = element.textContent;
+    owl += "'" + text + "'" ;
   }
   //HELPER 3
   //function to generate the closing tag
@@ -37,8 +37,8 @@ function generateOwl(doc) {
   }
   //HELPER 6
   //function to check if the element is an empty div
-  function isEmptyDiv(element) {
-    return element.tagName === 'DIV' && element.childNodes.length === 0;
+  function isVoid(element) {
+    return element.childNodes.length === 0;
   }
   //HELPER 7
   //function to check if the element is a text node
@@ -54,7 +54,7 @@ function generateOwl(doc) {
       generateTagAttr(element)
 
       //if empty div, generate the empty quote
-      if (isEmptyDiv(element)) {
+      if (isVoid(element)) {
         generateText(element);
       }
       //inner loop for child nodes
@@ -79,6 +79,8 @@ function generateOwl(doc) {
   }
 return owl ;
 }
+
+
 
 // Convert button
 $("#convert-button").on("click", function() { 

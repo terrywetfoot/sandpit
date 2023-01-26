@@ -42,10 +42,21 @@ function generateOwl(doc) {
     return element.childNodes.length === 0 && !voidElements.includes(element.tagName.toLowerCase());
   }
   //HELPER 7
+  //function to check if the element is all whitespace
+  function isAllWS(element) {
+    return !(/[^\t\n\r ]/.test(element.textContent));
+  }
+  //HELPER 8
   //function to check if the element is a text node
   function isTextNode(element) {
     return element.nodeType === Node.TEXT_NODE && element.textContent.trim() !== '';
   }
+  //HELPER 9
+  //function to generate the empty quote
+  function generateEmptyQuote(element) {
+    owl += `""`;
+  }
+
   //The main function 
   function metamorphose(element, indentLevel) {
 
@@ -54,9 +65,9 @@ function generateOwl(doc) {
       generateTabForward(indentLevel);
       generateTagAttr(element)
 
-      //if empty non void element, generate the empty quote
-      if (isEmptyNotVoid(element)) {
-        generateText(element);
+      //if empty non void element, generate an empty quote
+      if (isEmptyNotVoid(element) || isAllWS(element)) {
+        generateEmptyQuote(element);
       }
       //inner loop for child nodes
       for (const child of element.childNodes) {
@@ -80,7 +91,6 @@ function generateOwl(doc) {
   }
 return owl ;
 }
-
 
 
 // Convert button

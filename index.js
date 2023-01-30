@@ -1,4 +1,3 @@
-
 //function to generate the owl string
 function generateOwl(doc) {
   let owl = '';
@@ -39,21 +38,16 @@ function generateOwl(doc) {
   //function to check if the element is an empty non Void element
   function isEmptyNotVoid(element) {
     const voidElements = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'];
-    return element.childNodes.length === 0 && !voidElements.includes(element.tagName.toLowerCase());
+    return element.children.length === 0 && !voidElements.includes(element.tagName.toLowerCase()) && element.textContent.trim() === '';
   }
   //HELPER 7
-  //function to check if the element is all whitespace
-  function isAllWS(element) {
-    return !(/[^\t\n\r ]/.test(element.textContent));
-  }
-  //HELPER 8
   //function to check if the element is a text node
   function isTextNode(element) {
     return element.nodeType === Node.TEXT_NODE && element.textContent.trim() !== '';
   }
-  //HELPER 9
+  //HELPER 8
   //function to generate the empty quote
-  function generateEmptyQuote(element) {
+  function generateEmptyQuote() {
     owl += `""`;
   }
 
@@ -66,8 +60,8 @@ function generateOwl(doc) {
       generateTagAttr(element)
 
       //if empty non void element, generate an empty quote
-      if (isEmptyNotVoid(element) || isAllWS(element)) {
-        generateEmptyQuote(element);
+      if (isEmptyNotVoid(element)) {
+        generateEmptyQuote();
       }
       //inner loop for child nodes
       for (const child of element.childNodes) {
